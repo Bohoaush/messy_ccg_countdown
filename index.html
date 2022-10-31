@@ -1,0 +1,53 @@
+ <!DOCTYPE html>
+ <html>
+    <head>
+        <title>CasparCG countdown</title>
+        <style>
+            body
+            {
+                background-color: #222222;
+            }
+            #updatime
+            {
+            text-align: center;
+            font-size: 1000%;
+            color: white;
+            font-family: Ubuntu;
+            font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="updatime">Chyba komunikace</div>
+    </body>
+ 
+    <script>
+    setInterval(function(){
+        remtimestr = httpGet(window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/info");
+        remtime = JSON.parse(remtimestr);
+        remhours = Math.trunc(remtime/3600);
+        remmins = Math.trunc((remtime-(remhours*3600))/60);
+        remsecs = Math.trunc(remtime-(remhours*3600)-(remmins*60));
+        if (remhours < 10 ) {remhours = "0" + remhours;}
+        if (remmins < 10 ) {remmins = "0" + remmins;}
+        if (remsecs < 10 ) {remsecs = "0" + remsecs;}
+        document.getElementById("updatime").innerHTML = remhours + ":" + remmins + ":" + remsecs;
+        if (remtime < 10) {
+            document.getElementById("updatime").style.color = "red";
+        } else if (remtime < 20) {
+            document.getElementById("updatime").style.color = "yellow";
+        } else {
+            document.getElementById("updatime").style.color = "white";
+        }
+    }, 250);
+    
+    
+    function httpGet(url) {
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.open("GET", url, false);
+        xmlHttp.send (null);
+        return xmlHttp.responseText;
+    }
+    </script>
+
+</html>
